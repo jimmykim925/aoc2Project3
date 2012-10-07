@@ -8,7 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+
 @interface DatePickerViewController : UIViewController
+{
+
+  IBOutlet UITextField *textField;
+ 
+}
 - (IBAction)saveButton:(id)sender;
+- (IBAction)closeKeyboard:(id)sender;
 
 @end
