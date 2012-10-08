@@ -13,11 +13,13 @@
 @end
 
 @implementation DatePickerViewController
+@synthesize delegate;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+      //delegate = nil;
         // Custom initialization
     }
     return self;
@@ -25,8 +27,10 @@
 
 - (void)viewDidLoad
 {
- 
-    [super viewDidLoad];
+  [super viewDidLoad];
+  
+  // Sets the current date
+  currentDate = [NSDate date];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -49,17 +53,35 @@
 
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
 - (IBAction)saveButton:(id)sender {
+  NSString *saveText = textField.text;
+  NSLog(@"%@", saveText);
+  
+  if (delegate != nil){
+    [delegate DidSave:textField.text];
+  }
   [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (IBAction)closeKeyboard:(id)sender {
   [textField resignFirstResponder];
+}
+
+- (IBAction)datePicker:(id)sender {
+  UIDatePicker *datePicker = (UIDatePicker *)sender;
+  if(datePicker != nil){
+    NSDate *date = datePicker.date;
+    
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+     if (dateFormat != nil) {
+      [dateFormat setDateFormat:@"yyyy, MMMM, dd hh:mm aaa"];
+      
+    }
+    NSLog(@"%@", [dateFormat stringFromDate:date]);
+    
+    // Sets minimum date/time to current date
+    [datePicker setMinimumDate:currentDate];
+  }
 }
 @end

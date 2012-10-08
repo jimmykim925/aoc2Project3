@@ -8,14 +8,25 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol DatePickerDelegate <NSObject>
 
-@interface DatePickerViewController : UIViewController
+-(void)DidSave:(NSString *)eventString;
+
+
+@required
+@end
+
+
+@interface DatePickerViewController : UIViewController <UITextFieldDelegate> 
 {
-
+  id<DatePickerDelegate> delegate;
   IBOutlet UITextField *textField;
+  NSDate *currentDate;
  
 }
+@property (strong) id<DatePickerDelegate> delegate;
 - (IBAction)saveButton:(id)sender;
 - (IBAction)closeKeyboard:(id)sender;
+- (IBAction)datePicker:(id)sender;
 
 @end

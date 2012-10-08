@@ -7,8 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DatePickerViewController.h"
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController <DatePickerDelegate>
+{
+
+}
 
 @property (weak, nonatomic) IBOutlet UITextView *textView;
 

@@ -22,10 +22,9 @@
 	// Do any additional setup after loading the view, typically from a nib.
 }
 
-- (void)didReceiveMemoryWarning
+-(void)DidSave:(NSString *)eventString
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+  textView.text = eventString;
 }
 
 - (IBAction)addEvent:(id)sender {
@@ -33,6 +32,7 @@
   DatePickerViewController *viewController = [[DatePickerViewController alloc] initWithNibName:@"DatePickerViewController" bundle:nil];
   
   if (viewController != nil){
+    viewController.delegate = self;
     [self presentViewController:viewController animated:TRUE completion:nil];
   }
 }
