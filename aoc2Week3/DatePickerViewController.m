@@ -10,10 +10,15 @@
 
 @interface DatePickerViewController ()
 
+@property (nonatomic, strong) NSMutableArray *inputToArray;
+
 @end
 
 @implementation DatePickerViewController
+
 @synthesize delegate;
+@synthesize inputToArray;
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -55,13 +60,41 @@
 
 
 - (IBAction)saveButton:(id)sender {
-  NSString *saveText = textField.text;
-  NSLog(@"%@", saveText);
   
   if (delegate != nil){
-    [delegate DidSave:textField.text];
+    
+    // test *********
+    if (selectedDate !=nil) {
+      NSString *test = [NSString stringWithFormat:@"New Event: %@\n %@\n", textField.text, selectedDate];
+      [delegate DidSave:test];
+    } else {
+      
+      NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+      [dateFormat setDateFormat:@"yyyy, MMMM, dd hh:mm aaa"];
+      
+      NSDate *todaysDate = [NSDate date];
+      [dateFormat stringFromDate:todaysDate];
+      
+      NSString *test = [NSString stringWithFormat:@"New Event: %@\n %@\n", textField.text, [dateFormat stringFromDate:todaysDate]];
+      
+      
+      
+      [delegate DidSave:test];
+    }
+    
+    
+    //[delegate DidSave:[NSString stringWithFormat:@"New Event: %@\n %@", textField.text, selectedDate]];
+    
+    //NSLog(@"%@", textField.text);
+    //NSLog(@"%@", selectedDate);
   }
   [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(NSMutableArray*)inputToArray
+{
+  if (inputToArray == nil) inputToArray = [[NSMutableArray alloc] init];
+  return inputToArray;
 }
 
 - (IBAction)closeKeyboard:(id)sender {
@@ -69,19 +102,22 @@
 }
 
 - (IBAction)datePicker:(id)sender {
+  
   UIDatePicker *datePicker = (UIDatePicker *)sender;
+  
   if(datePicker != nil){
     NSDate *date = datePicker.date;
     
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
      if (dateFormat != nil) {
       [dateFormat setDateFormat:@"yyyy, MMMM, dd hh:mm aaa"];
-      
-    }
-    NSLog(@"%@", [dateFormat stringFromDate:date]);
+      }
+    
+    //NSLog(@"%@", [dateFormat stringFromDate:date]);
     
     // Sets minimum date/time to current date
     [datePicker setMinimumDate:currentDate];
+    selectedDate = [dateFormat stringFromDate:date];
   }
 }
 @end

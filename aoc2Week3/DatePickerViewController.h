@@ -12,19 +12,20 @@
 
 -(void)DidSave:(NSString *)eventString;
 
-
 @required
 @end
 
 
-@interface DatePickerViewController : UIViewController <UITextFieldDelegate> 
+@interface DatePickerViewController : UIViewController <UITextFieldDelegate>
 {
   id<DatePickerDelegate> delegate;
   IBOutlet UITextField *textField;
   NSDate *currentDate;
- 
+  NSString *selectedDate;
 }
+
 @property (strong) id<DatePickerDelegate> delegate;
+
 - (IBAction)saveButton:(id)sender;
 - (IBAction)closeKeyboard:(id)sender;
 - (IBAction)datePicker:(id)sender;
