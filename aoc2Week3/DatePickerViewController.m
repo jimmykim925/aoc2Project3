@@ -10,21 +10,18 @@
 
 @interface DatePickerViewController ()
 
-@property (nonatomic, strong) NSMutableArray *inputToArray;
-
 @end
 
 @implementation DatePickerViewController
-
 @synthesize delegate;
-@synthesize inputToArray;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-      //delegate = nil;
+    // Clears our delegate
+      delegate = nil;
         // Custom initialization
     }
     return self;
@@ -40,6 +37,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+  // Keyboard showing and hiding
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
   
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -58,63 +56,52 @@
 
 }
 
-
 - (IBAction)saveButton:(id)sender {
   
   if (delegate != nil){
     
-    // test *********
+    // format string to include date and event text use delegate to send info to view controller
     if (selectedDate !=nil) {
-      NSString *test = [NSString stringWithFormat:@"New Event: %@\n %@\n", textField.text, selectedDate];
-      [delegate DidSave:test];
+      NSString *formattedTextDate = [NSString stringWithFormat:@"\n New Event: %@\n %@\n", textField.text, selectedDate];
+      [delegate DidSave:formattedTextDate];
     } else {
-      
+      // sets date/time to current date/time if no value changed
       NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
       [dateFormat setDateFormat:@"yyyy, MMMM, dd hh:mm aaa"];
       
       NSDate *todaysDate = [NSDate date];
       [dateFormat stringFromDate:todaysDate];
       
-      NSString *test = [NSString stringWithFormat:@"New Event: %@\n %@\n", textField.text, [dateFormat stringFromDate:todaysDate]];
+      NSString *formattedTextDate = [NSString stringWithFormat:@"\n New Event: %@\n %@\n", textField.text, [dateFormat stringFromDate:todaysDate]];
       
-      
-      
-      [delegate DidSave:test];
+      // Sends the date/time information using the delegate to the root view controller
+      [delegate DidSave:formattedTextDate];
     }
     
-    
-    //[delegate DidSave:[NSString stringWithFormat:@"New Event: %@\n %@", textField.text, selectedDate]];
-    
-    //NSLog(@"%@", textField.text);
-    //NSLog(@"%@", selectedDate);
   }
+  // Dismisses modal view
   [self dismissViewControllerAnimated:YES completion:nil];
 }
 
--(NSMutableArray*)inputToArray
-{
-  if (inputToArray == nil) inputToArray = [[NSMutableArray alloc] init];
-  return inputToArray;
-}
-
 - (IBAction)closeKeyboard:(id)sender {
+  // Resigns the text field as the first responder
   [textField resignFirstResponder];
 }
 
 - (IBAction)datePicker:(id)sender {
-  
+  // Casts the date picker
   UIDatePicker *datePicker = (UIDatePicker *)sender;
   
   if(datePicker != nil){
+    // sets date/time
     NSDate *date = datePicker.date;
     
+    // formats the date/time
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
      if (dateFormat != nil) {
       [dateFormat setDateFormat:@"yyyy, MMMM, dd hh:mm aaa"];
       }
-    
-    //NSLog(@"%@", [dateFormat stringFromDate:date]);
-    
+        
     // Sets minimum date/time to current date
     [datePicker setMinimumDate:currentDate];
     selectedDate = [dateFormat stringFromDate:date];

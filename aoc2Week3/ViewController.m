@@ -24,13 +24,14 @@
 
 -(void)DidSave:(NSString *)eventString
 {
-  textView.text = eventString;
+  // Appends on text view all the new events on the same screen
+  textView.text = [textView.text stringByAppendingString:eventString];
 }
 
 - (IBAction)addEvent:(id)sender {
-
   DatePickerViewController *viewController = [[DatePickerViewController alloc] initWithNibName:@"DatePickerViewController" bundle:nil];
   
+  // presents the modal view
   if (viewController != nil){
     viewController.delegate = self;
     [self presentViewController:viewController animated:TRUE completion:nil];
